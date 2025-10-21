@@ -241,15 +241,17 @@ export default function Checks() {
         )}
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
-            <form onSubmit={handleSubmit} className="flex flex-col h-full">
-              <DialogHeader>
-                <DialogTitle>Submit Uniform Check</DialogTitle>
-                <DialogDescription>
-                  Upload a photo for AI-powered compliance verification
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4 overflow-y-auto flex-1">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden p-0">
+            <form onSubmit={handleSubmit} className="flex flex-col max-h-[90vh]">
+              <div className="px-6 pt-6">
+                <DialogHeader>
+                  <DialogTitle>Submit Uniform Check</DialogTitle>
+                  <DialogDescription>
+                    Upload a photo for AI-powered compliance verification
+                  </DialogDescription>
+                </DialogHeader>
+              </div>
+              <div className="grid gap-4 px-6 py-4 overflow-y-auto flex-1">
                 <div className="grid gap-2">
                   <Label htmlFor="company">Company *</Label>
                   <Select
@@ -344,7 +346,8 @@ export default function Checks() {
                   )}
                 </div>
               </div>
-              <DialogFooter>
+              <div className="px-6 pb-6 border-t pt-4">
+                <DialogFooter>
                 <Button
                   type="button"
                   variant="outline"
@@ -357,6 +360,7 @@ export default function Checks() {
                   {isUploading ? "Submitting..." : "Submit & Analyze"}
                 </Button>
               </DialogFooter>
+              </div>
             </form>
           </DialogContent>
         </Dialog>
