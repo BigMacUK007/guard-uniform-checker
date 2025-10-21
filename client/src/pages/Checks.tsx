@@ -89,20 +89,28 @@ export default function Checks() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted', formData, imageFile);
+    
     if (!formData.officerId || !formData.companyId || !formData.standardId || !imageFile) {
       toast.error("All fields and an image are required");
+      console.error('Validation failed:', { formData, imageFile });
       return;
     }
 
     setIsUploading(true);
+    console.log('Starting upload...');
+    
     try {
       // Upload image to S3
       const imageBuffer = await imageFile.arrayBuffer();
+      console.log('Image buffer created, size:', imageBuffer.byteLength);
+      
       const { url: imageUrl } = await storagePut(
         `uniform-checks/${Date.now()}-${imageFile.name}`,
         new Uint8Array(imageBuffer),
         imageFile.type
       );
+      console.log('Image uploaded to:', imageUrl);
 
       // Submit check
       submitCheck.mutate({
@@ -110,7 +118,8 @@ export default function Checks() {
         imageUrl,
       });
     } catch (error) {
-      toast.error("Failed to upload image");
+      console.error('Upload error:', error);
+      toast.error(`Failed to upload image: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setIsUploading(false);
     }
   };
