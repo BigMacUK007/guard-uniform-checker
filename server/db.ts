@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, companies, InsertCompany, officers, InsertOfficer, complianceStandards, InsertComplianceStandard, uniformChecks, InsertUniformCheck } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -85,4 +85,104 @@ export async function getUser(id: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Company queries
+export async function createCompany(company: InsertCompany) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(companies).values(company);
+  return company;
+}
+
+export async function getCompanyById(id: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(companies).where(eq(companies.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getCompaniesByOwner(ownerId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(companies).where(eq(companies.ownerId, ownerId));
+}
+
+// Officer queries
+export async function createOfficer(officer: InsertOfficer) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(officers).values(officer);
+  return officer;
+}
+
+export async function getOfficersByCompany(companyId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(officers).where(eq(officers.companyId, companyId));
+}
+
+export async function getOfficerById(id: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(officers).where(eq(officers.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// Compliance standard queries
+export async function createComplianceStandard(standard: InsertComplianceStandard) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(complianceStandards).values(standard);
+  return standard;
+}
+
+export async function getStandardsByCompany(companyId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(complianceStandards).where(eq(complianceStandards.companyId, companyId));
+}
+
+export async function getStandardById(id: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(complianceStandards).where(eq(complianceStandards.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateComplianceStandard(id: string, updates: Partial<InsertComplianceStandard>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(complianceStandards).set({ ...updates, updatedAt: new Date() }).where(eq(complianceStandards.id, id));
+}
+
+// Uniform check queries
+export async function createUniformCheck(check: InsertUniformCheck) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.insert(uniformChecks).values(check);
+  return check;
+}
+
+export async function getChecksByCompany(companyId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(uniformChecks).where(eq(uniformChecks.companyId, companyId));
+}
+
+export async function getChecksByOfficer(officerId: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(uniformChecks).where(eq(uniformChecks.officerId, officerId));
+}
+
+export async function getCheckById(id: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(uniformChecks).where(eq(uniformChecks.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateUniformCheck(id: string, updates: Partial<InsertUniformCheck>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.update(uniformChecks).set(updates).where(eq(uniformChecks.id, id));
+}
