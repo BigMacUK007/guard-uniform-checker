@@ -241,15 +241,15 @@ export default function Checks() {
         )}
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-2xl">
-            <form onSubmit={handleSubmit}>
+          <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
+            <form onSubmit={handleSubmit} className="flex flex-col h-full">
               <DialogHeader>
                 <DialogTitle>Submit Uniform Check</DialogTitle>
                 <DialogDescription>
                   Upload a photo for AI-powered compliance verification
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
+              <div className="grid gap-4 py-4 overflow-y-auto flex-1">
                 <div className="grid gap-2">
                   <Label htmlFor="company">Company *</Label>
                   <Select
@@ -338,7 +338,7 @@ export default function Checks() {
                       <img
                         src={imagePreview}
                         alt="Preview"
-                        className="w-full h-48 object-cover rounded-lg border"
+                        className="w-full max-h-64 object-contain rounded-lg border"
                       />
                     </div>
                   )}
