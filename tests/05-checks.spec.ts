@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import path from 'path';
 
 test.describe('Uniform Checks Management', () => {
   test.beforeEach(async ({ page }) => {
